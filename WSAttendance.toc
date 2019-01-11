@@ -1,0 +1,11 @@
+## Title: WSAttendance
+## Interface: 80100
+## Version: 1.0
+## Author: Oppzippy
+## SavedVariables: WSAttendanceDB
+
+libs.xml
+locales.xml
+Core.lua
+Options.lua
+OptionActions.lua

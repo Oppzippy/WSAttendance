@@ -3,6 +3,7 @@ local AceConfig = LibStub("AceConfig-3.0")
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("WSAttendance")
 
+-- TODO: Remove this
 local dbDefaults = {
     profile = {
         raids = {

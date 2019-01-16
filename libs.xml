@@ -2,7 +2,7 @@
 ..\FrameXML\UI.xsd">
     <Script file="Libs\LibStub\LibStub.lua"/>
     <Script file="Libs\LibCopyPaste\LibCopyPaste.lua"/>
-    <Script file="Libs\LibJSON\LibJSON-1.0.lua"/>
+    <Script file="Libs\LibJSON-1.0\LibJSON-1.0.lua"/>
 	<Include file="Libs\AceAddon-3.0\AceAddon-3.0.xml"/>
     <Include file="Libs\AceConfig-3.0\AceConfig-3.0.xml"/>
     <Include file="Libs\AceConsole-3.0\AceConsole-3.0.xml"/>

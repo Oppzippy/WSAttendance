@@ -1,5 +1,6 @@
 local addon = LibStub("AceAddon-3.0"):GetAddon("WSAttendance")
 local AttendanceLogSupervisor = {}
+addon.AttendanceLogSupervisor = AttendanceLogSupervisor
 AttendanceLogSupervisor.__index = AttendanceLogSupervisor
 
 function AttendanceLogSupervisor:Create(log)

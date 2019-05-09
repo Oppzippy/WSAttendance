@@ -1,21 +1,25 @@
 local addon = LibStub("AceAddon-3.0"):GetAddon("WSAttendance")
-addon.eventFrame = CreateFrame("frame")
 addon.attendanceTracker = {}
-local frame = addon.eventFrame
+local attendanceTracker = addon.attendanceTracker
+local frame = CreateFrame("Frame")
 
-frame:RegisterEvent("GUILD_ROSTER_UPDATE")
-frame:RegisterEvent("RAID_ROSTER_UPDATE")
-
-local function OnEvent(event, ...)
-    local attendanceTracker = addon.attendanceTracker
-    local func = attendanceTracker[event]
-    func(attendanceTracker, ...)
+-- Optional log to resume tracking
+function attendanceTracker:StartTracking(log)
+    self:StopTracking()
+    self.logSupervisor = addon.AttendanceLogSupervisor:Create(log)
+    self.log = self.logSupervisor.log
+    self.logSupervisor:UpdateLog()
+    -- TODO don't update in combat
+    self.ticker = C_Timer.NewTicker(60, function()
+        self.logSupervisor:UpdateLog()
+    end)
 end
 
-function addon.attendanceTracker:GUILD_ROSTER_UPDATE()
-
-end
-
-function addon.attendanceTracker:RAID_ROSTER_UPDATE()
-
+function attendanceTracker:StopTracking()
+    if self.ticker then
+        self.ticker:Cancel()
+        self.ticker = nil
+    end
+    self.logSupervisor = nil
+    self.log = nil
 end

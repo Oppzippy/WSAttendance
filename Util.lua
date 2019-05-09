@@ -11,25 +11,27 @@ function addon.util.IterateGuildMembers()
     end
 end
 
+-- Returns a table containing all keys that are in one table but not the other
+
 function addon.util.TableDiff(t1, t2)
     local diff = {}
-    for k, v in pairs(t1) do
-        if v ~= t2[k] then
-            diff[k] = true
+    local count = 0
+    -- Add all keys if a table is nil
+    if t1 ~= nil then
+        for k, v in pairs(t1) do
+            if t2 == nil or v ~= t2[k] then
+                count = count + 1
+                diff[count] = k
+            end
         end
     end
-    for k, v in pairs(t2) do
-        if v ~= t1[k] then
-            diff[k] = true
+    if t2 ~= nil then
+        for k, v in pairs(t2) do
+            if t1 == nil or v ~= t1[k] then
+                count = count + 1
+                diff[count] = k
+            end
         end
     end
     return diff
-end
-
--- t1 will be modified
-function addon.util.TableAppend(t1, t2)
-    local len = #t1
-    for i = 1, #t2 do
-        t1[len + i] = t2[i]
-    end
 end

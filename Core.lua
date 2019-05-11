@@ -27,9 +27,7 @@ function addon:OnInitialize()
     self.db.RegisterCallback(self, "OnProfileReset", "RefreshConfig")
     AceConfig:RegisterOptionsTable("WSAttendance", function()
         return self:CreateOptionsTable()
-    end, {
-        "wsa", "wsattendance", "wrongstratattendance",
-    })
+    end)
     self.optionsFrame = AceConfigDialog:AddToBlizOptions("WSAttendance", L.name)
 end
 

@@ -91,5 +91,4 @@ end
 function AttendanceLogSupervisor:UpdateLog()
     local newState = self:SnapshotState()
     self:AddState(newState)
-    addon:Debug(self)
 end

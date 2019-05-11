@@ -49,7 +49,6 @@ function addon:StartLog()
     local log = self.attendanceTracker:StartTracking()
     local dbLogs = self.db.profile.logs
     dbLogs[#dbLogs+1] = log
-    self:Debug(self.db.profile, "Profile")
     return log
 end
 

@@ -6,7 +6,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale("WSAttendance")
 -- TODO: Remove this
 local dbDefaults = {
     profile = {
-        raids = {
+        logs = {
             [1] = {
                 date = {
                     hour = 4,

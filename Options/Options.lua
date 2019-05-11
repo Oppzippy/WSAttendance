@@ -2,23 +2,23 @@ local addon = LibStub("AceAddon-3.0"):GetAddon("WSAttendance")
 local AceDBOptions = LibStub("AceDBOptions-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("WSAttendance")
 
-function addon:CreateOptionsRaidExport(raid)
+function addon:CreateOptionsRaidExport(log)
     return {
-        name = L.date_time:format(raid.date.year, raid.date.month, raid.date.day, raid.date.hour, raid.date.minute),
+        name = L.date_time:format(log.date.year, log.date.month, log.date.day, log.date.hour, log.date.minute),
         type = "group",
         args = {
             export = {
                 name = L.export,
                 type = "execute",
                 func = function()
-                    self:ExportRaid(raid)
+                    self:ExportRaid(log)
                 end,
             },
             delete = {
                 name = L.delete,
                 type = "execute",
                 func = function()
-                    self:DeleteRaid(raid)
+                    self:DeleteRaid(log)
                 end,
             },
         }

@@ -3,11 +3,11 @@ local L = LibStub("AceLocale-3.0"):GetLocale("WSAttendance")
 local LibCopyPaste = LibStub("LibCopyPaste-1.0")
 local LibJSON = LibStub("LibJSON-1.0")
 
-function addon:DeleteRaid(raid)
-    local raids = self.db.profile.raids
-    for i, savedRaid in ipairs(raids) do
-        if savedRaid == raid then
-            table.remove(raids, i)
+function addon:DeleteRaid(log)
+    local logs = self.db.profile.logs
+    for i, savedLog in ipairs(logs) do
+        if savedLog == log then
+            table.remove(logs, i)
             return
         end
     end

@@ -44,7 +44,7 @@ function attendanceTracker:Update()
         self.logSupervisor:UpdateLog()
     elseif self:TimeLeft(self.updateTimer) == 0 then
         addon:Debug("Scheduling update")
-        self.updateTimer = addon:ScheduleTimer("Update", MAX_UPDATE_RATE - t)
+        self.updateTimer = self:ScheduleTimer("QueueUpdate", MAX_UPDATE_RATE - (t - self.prevUpdate))
     end
 end
 

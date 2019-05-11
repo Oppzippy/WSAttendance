@@ -7,8 +7,8 @@
 libs.xml
 locales.xml
 Core.lua
-Options.lua
-OptionActions.lua
 Util.lua
-AttendanceLogSupervisor.lua
-AttendanceTracker.lua
+Options/Options.lua
+Options/OptionActions.lua
+Logging/AttendanceLogSupervisor.lua
+Logging/AttendanceTracker.lua

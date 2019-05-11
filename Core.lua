@@ -45,13 +45,13 @@ function addon:OnChatCommand(msg)
     action = action:lower()
     if action == "start" then
         self:StartLog()
-        print(L.started_log)
+        print(L.start_log)
     elseif action == "stop" then
         self:StopLog()
-        print(L.stopped_log)
+        print(L.stop_log)
     elseif action == "resume" then
         self:ResumeLog()
-        print(L.resumed_log)
+        print(L.resume_log)
     end
 end
 

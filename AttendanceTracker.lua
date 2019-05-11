@@ -1,29 +1,65 @@
 local addon = LibStub("AceAddon-3.0"):GetAddon("WSAttendance")
 addon.attendanceTracker = {}
 local attendanceTracker = addon.attendanceTracker
-local frame = CreateFrame("Frame")
---[[
-TODO Update on events, but don't update in combat. Instead, queue an update for after
-combat. Limit the maximum update rate though to a few seconds. If a second update occurs within
-those few seconds, queue one after the three seconds have elapsed.
-]]--
+attendanceTracker.frame = CreateFrame("Frame")
+do
+    local aceTimer = LibStub("AceTimer-3.0")
+    aceTimer:Embed(attendanceTracker)
+end
+
+local MAX_UPDATE_RATE = 10 -- seconds
 
 -- Optional log to resume tracking
 function attendanceTracker:StartTracking(log)
     self:StopTracking()
     self.logSupervisor = addon.AttendanceLogSupervisor:Create(log)
     self.log = self.logSupervisor.log
-    self.logSupervisor:UpdateLog()
-    self.ticker = C_Timer.NewTicker(60, function()
-        self.logSupervisor:UpdateLog()
+    self.prevUpdate = 0
+    self:Update()
+    self.frame:SetScript("OnEvent", function(event)
+        attendanceTracker[event](attendanceTracker)
     end)
+    self.frame:RegisterEvent("PLAYER_REGEN_ENABLED")
+    self.frame:RegisterEvent("GUILD_ROSTER_UPDATE")
+    self.frame:RegisterEvent("GROUP_ROSTER_UPDATE")
 end
 
 function attendanceTracker:StopTracking()
-    if self.ticker then
-        self.ticker:Cancel()
-        self.ticker = nil
-    end
     self.logSupervisor = nil
     self.log = nil
+    self.frame:SetScript("OnEvent", nil)
+    self.frame:UnregisterAllEvents()
+end
+
+function attendanceTracker:Update()
+    local t = GetTime()
+    if t - self.prevUpdate < MAX_UPDATE_RATE then
+        self.prevUpdate = t
+        self.logSupervisor:UpdateLog()
+    elseif self:TimeLeft(self.updateTimer) ~= 0 then
+        addon:ScheduleTimer("Update", MAX_UPDATE_RATE - t)
+    end
+end
+
+function attendanceTracker:QueueUpdate()
+    if InCombatLockdown() then
+        self.updateQueued = true
+    else
+        self:Update()
+    end
+end
+
+function attendanceTracker:PLAYER_REGEN_ENABLED()
+    if self.updateQueued then
+        self:Update()
+        self.updateQueued = nil
+    end
+end
+
+function attendanceTracker:GUILD_ROSTER_UPDATE()
+    self:QueueUpdate()
+end
+
+function attendanceTracker:GROUP_ROSTER_UPDATE()
+    self:QueueUpdate()
 end

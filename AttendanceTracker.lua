@@ -16,7 +16,7 @@ function attendanceTracker:StartTracking(log)
     self.log = self.logSupervisor.log
     self.prevUpdate = 0
     self:Update()
-    self.frame:SetScript("OnEvent", function(event)
+    self.frame:SetScript("OnEvent", function(_, event)
         local f = self[event]
         if f then f(self) end
     end)
@@ -35,15 +35,18 @@ end
 
 function attendanceTracker:Update()
     local t = GetTime()
-    if t - self.prevUpdate < MAX_UPDATE_RATE then
+    if t - self.prevUpdate > MAX_UPDATE_RATE then
+        print("Update")
         self.prevUpdate = t
         self.logSupervisor:UpdateLog()
     elseif self:TimeLeft(self.updateTimer) ~= 0 then
+        print("Scheduling update")
         addon:ScheduleTimer("Update", MAX_UPDATE_RATE - t)
     end
 end
 
 function attendanceTracker:QueueUpdate()
+    print("Update queued")
     if InCombatLockdown() then
         self.updateQueued = true
     else

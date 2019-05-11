@@ -22,6 +22,7 @@ function attendanceTracker:StartTracking(log)
     self.frame:RegisterEvent("PLAYER_REGEN_ENABLED")
     self.frame:RegisterEvent("GUILD_ROSTER_UPDATE")
     self.frame:RegisterEvent("GROUP_ROSTER_UPDATE")
+    return self.log
 end
 
 function attendanceTracker:StopTracking()

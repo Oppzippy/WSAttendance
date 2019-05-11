@@ -1,6 +1,9 @@
 local addon = LibStub("AceAddon-3.0"):GetAddon("WSAttendance")
 addon.util = {}
 
+local GetNumGroupMembers, GetNumGuildMembers, GetGuildRosterInfo = GetNumGroupMembers, GetNumGuildMembers, GetGuildRosterInfo
+local IsInRaid = IsInRaid
+
 function addon.util.IterateGuildMembers()
     local i = 0
     local max = GetNumGuildMembers()

@@ -3,6 +3,9 @@ local AttendanceLogSupervisor = {}
 addon.AttendanceLogSupervisor = AttendanceLogSupervisor
 AttendanceLogSupervisor.__index = AttendanceLogSupervisor
 
+local UnitName, UnitIsConnected = UnitName, UnitIsConnected
+local tconcat = table.concat
+
 function AttendanceLogSupervisor:Create(log)
     local ret = {}
     setmetatable(ret, AttendanceLogSupervisor)
@@ -29,14 +32,24 @@ end
 -- Returns a table containing the current state
 function AttendanceLogSupervisor:SnapshotState()
     local state = {}
+    -- Guild
     for name, _, _, _, _, zone, _, _, online, _, _, _, _, _, _, _, guid in addon.util.IterateGuildMembers() do
         local status = {}
         state[name] = status
         status.online = online
-        if online then
-            status.zone = zone
-        end
+        status.zone = zone
         status.group = IsGUIDInGroup(guid)
+    end
+    -- Group
+    for unit in addon.util.IterateGroupMembers() do
+        local name, realm = UnitFullName(unit)
+        name = name .. "-" .. realm
+        if not state[name] then
+            local status = {}
+            state[name] = status
+            status.online = UnitIsConnected(unit)
+            status.group = true -- Iterate group members... obviously
+        end
     end
     return state
 end

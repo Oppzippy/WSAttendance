@@ -29,14 +29,14 @@ end
 -- Returns a table containing the current state
 function AttendanceLogSupervisor:SnapshotState()
     local state = {}
-    for name, _, _, _, _, zone, _, _, online in addon.util.IterateGuildMembers() do
+    for name, _, _, _, _, zone, _, _, online, _, _, _, _, _, _, _, guid in addon.util.IterateGuildMembers() do
         local status = {}
         state[name] = status
         status.online = online
         if online then
             status.zone = zone
         end
-        if UnitInRaid(name) then
+        if IsGUIDInGroup(guid) then
             status.group = true
         end
     end
@@ -46,14 +46,18 @@ end
 function AttendanceLogSupervisor:AddState(newState)
     -- Remove redundant info by comparing the old state playes with the new
     local updates = {}
-    for player, status in pairs(self.state) do
-        local diff = addon.util.TableDiff(self.state, newState[player])
-        if #diff ~= 0 then
-            updates[player] = {}
-            for _, key in pairs(diff) do
-                updates[player][key] = newState[player][key]
+    if self.state then
+        for player, status in pairs(self.state) do
+            local diff = addon.util.TableDiff(self.state, newState[player])
+            if #diff ~= 0 then
+                updates[player] = {}
+                for _, key in pairs(diff) do
+                    updates[player][key] = newState[player][key]
+                end
             end
         end
+    else
+        updates = newState
     end
     tinsert(self.log, updates)
     self.state = newState

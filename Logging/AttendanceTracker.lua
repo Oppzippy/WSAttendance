@@ -27,21 +27,24 @@ function attendanceTracker:StartTracking(log)
 end
 
 function attendanceTracker:StopTracking()
+    local log = self.log
     self.logSupervisor = nil
     self.log = nil
     self.frame:SetScript("OnEvent", nil)
     self.frame:UnregisterAllEvents()
+    return log
 end
 
 function attendanceTracker:Update()
     local t = GetTime()
-    if t - self.prevUpdate > MAX_UPDATE_RATE then
+    if t - self.prevUpdate >= MAX_UPDATE_RATE then
         addon:Debug("Update")
         self.prevUpdate = t
+        self:CancelTimer(self.updateTimer)
         self.logSupervisor:UpdateLog()
-    elseif self:TimeLeft(self.updateTimer) ~= 0 then
+    elseif self:TimeLeft(self.updateTimer) == 0 then
         addon:Debug("Scheduling update")
-        addon:ScheduleTimer("Update", MAX_UPDATE_RATE - t)
+        self.updateTimer = addon:ScheduleTimer("Update", MAX_UPDATE_RATE - t)
     end
 end
 

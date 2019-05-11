@@ -5,14 +5,14 @@ AttendanceLogSupervisor.__index = AttendanceLogSupervisor
 
 function AttendanceLogSupervisor:Create(log)
     local ret = {}
-    setmetatable(ret, self)
+    setmetatable(ret, AttendanceLogSupervisor)
     -- Construct
     if log then
         ret.log = log
     else
         ret.log = {}
     end
-    self:RebuildState()
+    ret:RebuildState()
     return ret
 end
 

@@ -3,7 +3,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale("WSAttendance")
 local LibCopyPaste = LibStub("LibCopyPaste-1.0")
 local LibJSON = LibStub("LibJSON-1.0")
 
-function addon:DeleteRaid(log)
+function addon:DeleteLog(log)
     local logs = self.db.profile.logs
     for i, savedLog in ipairs(logs) do
         if savedLog == log then
@@ -13,7 +13,7 @@ function addon:DeleteRaid(log)
     end
 end
 
-function addon:ExportRaid(raid)
-    local json = LibJSON:ToJSON(raid.dataPoints)
+function addon:ExportLog(log)
+    local json = LibJSON:ToJSON(log)
     LibCopyPaste:Copy(L.name, json)
 end

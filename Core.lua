@@ -6,17 +6,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale("WSAttendance")
 -- TODO: Remove this
 local dbDefaults = {
     profile = {
-        logs = {
-            [1] = {
-                date = {
-                    hour = 4,
-                    minute = 30,
-                    day = 11,
-                    month = 1,
-                    year = 2019,
-                }
-            }
-        }
+        logs = {},
     }
 }
 
@@ -57,22 +47,25 @@ end
 
 function addon:StartLog()
     local log = self.attendanceTracker:StartTracking()
-    -- TODO: Save the log
+    local dbLogs = self.db.profile.logs
+    dbLogs[#dbLogs+1] = log
+    return log
 end
 
 function addon:StopLog()
-    self.attendanceTracker:StopTracking()
+    return self.attendanceTracker:StopTracking()
 end
 
 function addon:ResumeLog()
-    -- local prevLog = TODO
-    -- self.attendanceTracker:ResumeLog(prevLog)
+    local dbLogs = self.db.profile.logs
+    local prevLog = dbLogs[#dbLogs]
+    self.attendanceTracker:ResumeLog(prevLog)
+    return prevLog
 end
 
 do
     local version = "@project-version@"
     local git = version:find("@", nil, true)
-    local prefix = string.format("WSAttendance (%s): ", version)
     function addon:Debug(...)
         if git then
             local arg1, arg2 = ...
@@ -91,7 +84,7 @@ do
                     end
                 end
             else
-                self:Print(prefix, "DEBUG", ...)
+                self:Print("[DEBUG]", ...)
             end
         end
     end

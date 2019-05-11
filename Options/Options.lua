@@ -2,34 +2,37 @@ local addon = LibStub("AceAddon-3.0"):GetAddon("WSAttendance")
 local AceDBOptions = LibStub("AceDBOptions-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("WSAttendance")
 
-function addon:CreateOptionsRaidExport(log)
+function addon:CreateOptionsLogExport(log)
+    if #log == 0 then return end
     return {
-        name = L.date_time:format(log.date.year, log.date.month, log.date.day, log.date.hour, log.date.minute),
+        name = date(L.date_time, log[1].timestamp),
         type = "group",
         args = {
             export = {
                 name = L.export,
                 type = "execute",
                 func = function()
-                    self:ExportRaid(log)
+                    self:ExportLog(log)
                 end,
             },
             delete = {
                 name = L.delete,
                 type = "execute",
                 func = function()
-                    self:DeleteRaid(log)
+                    self:DeleteLog(log)
                 end,
             },
         }
     }
 end
 
-function addon:CreateOptionsRaidExports()
+function addon:CreateOptionsLogExports()
     local options = {}
-    for _, raid in ipairs(self.db.profile.raids) do
-        local option = self:CreateOptionsRaidExport(raid)
-        options[option.name] = option
+    for _, log in ipairs(self.db.profile.logs) do
+        local option = self:CreateOptionsLogExport(log)
+        if option then
+            options[option.name] = option
+        end
     end
     return options
 end
@@ -39,11 +42,11 @@ function addon:CreateOptionsTable()
         type = "group",
         name = L.name,
         args = {
-            savedRaids = {
-                name = L.saved_raids,
-                desc = L.saved_raids_desc,
+            savedLogs = {
+                name = L.saved_logs,
+                desc = L.saved_logs_desc,
                 type = "group",
-                args = self:CreateOptionsRaidExports(),
+                args = self:CreateOptionsLogExports(),
             },
             profiles = AceDBOptions:GetOptionsTable(self.db),
         }

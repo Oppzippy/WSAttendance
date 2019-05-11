@@ -72,7 +72,7 @@ function AttendanceLogSupervisor:AddState(newState)
     end
     if updates[1] then -- Don't add to log if there are no updates
         tinsert(self.log, {
-            time = GetServerTime(),
+            timestamp = GetServerTime(),
             updates = updates,
         })
     end

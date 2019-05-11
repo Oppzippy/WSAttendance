@@ -1,7 +1,7 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("WSAttendance", "enUS", true)
 
 L.name = "WSAttendance"
-L.date_time = "%04d-%02d-%02d %02d:%02d"
+L.date_time = "%Y-%m-%d %I:%M%p"
 L.export = "Export"
 L.delete = "Delete"
 L.saved_logs = "Saved Logs"

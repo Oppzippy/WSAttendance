@@ -68,3 +68,31 @@ function addon:ResumeLog()
     -- local prevLog = TODO
     -- self.attendanceTracker:ResumeLog(prevLog)
 end
+
+do
+    local version = "@project-version@"
+    local git = version:find("@", nil, true)
+    local prefix = string.format("WSAttendance (%s): ", version)
+    function addon:Debug(...)
+        if git then
+            local arg1, arg2 = ...
+            local t = type(arg1)
+            if t == "table" then
+                -- luacheck: globals ViragDevTool_AddData
+                if ViragDevTool_AddData then
+                    local title = type(arg2) == "string" and arg2
+                    ViragDevTool_AddData(arg1, title)
+                else
+                    for k, v in pairs(arg1) do
+                        local keyType = type(k)
+                        if keyType == "string" or keyType == "number" then
+                            self:Print(k)
+                        end
+                    end
+                end
+            else
+                self:Print(prefix, "DEBUG", ...)
+            end
+        end
+    end
+end

@@ -36,17 +36,17 @@ end
 function attendanceTracker:Update()
     local t = GetTime()
     if t - self.prevUpdate > MAX_UPDATE_RATE then
-        print("Update")
+        addon:Debug("Update")
         self.prevUpdate = t
         self.logSupervisor:UpdateLog()
     elseif self:TimeLeft(self.updateTimer) ~= 0 then
-        print("Scheduling update")
+        addon:Debug("Scheduling update")
         addon:ScheduleTimer("Update", MAX_UPDATE_RATE - t)
     end
 end
 
 function attendanceTracker:QueueUpdate()
-    print("Update queued")
+    addon:Debug("Update queued")
     if InCombatLockdown() then
         self.updateQueued = true
     else

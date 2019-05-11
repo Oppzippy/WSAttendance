@@ -49,6 +49,7 @@ function addon:StartLog()
     local log = self.attendanceTracker:StartTracking()
     local dbLogs = self.db.profile.logs
     dbLogs[#dbLogs+1] = log
+    self:Debug(self.db.profile, "Profile")
     return log
 end
 
@@ -73,7 +74,7 @@ do
             if t == "table" then
                 -- luacheck: globals ViragDevTool_AddData
                 if ViragDevTool_AddData then
-                    local title = type(arg2) == "string" and arg2
+                    local title = type(arg2) == "string" and arg2 or nil
                     ViragDevTool_AddData(arg1, title)
                 else
                     for k, v in pairs(arg1) do

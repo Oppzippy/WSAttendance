@@ -57,24 +57,28 @@ end
 function AttendanceLogSupervisor:AddState(newState)
     -- Remove redundant info by comparing the old state playes with the new
     local updates = {}
+    local doUpdates = false -- Don't add to log if there are no updates
     if self.state then
         for player, status in pairs(self.state) do
             local diff = addon.util.TableDiff(self.state[player], newState[player])
             if #diff ~= 0 then
                 updates[player] = {}
+                doUpdates = true
                 for _, key in pairs(diff) do
                     updates[player][key] = newState[player][key]
                 end
             end
         end
     else
+        doUpdates = true
         updates = newState
     end
-    if updates[1] then -- Don't add to log if there are no updates
-        tinsert(self.log, {
+    if doUpdates then
+        local log = self.log
+        log[#log+1] = {
             timestamp = GetServerTime(),
             updates = updates,
-        })
+        }
     end
     self.state = newState
 end
@@ -87,4 +91,5 @@ end
 function AttendanceLogSupervisor:UpdateLog()
     local newState = self:SnapshotState()
     self:AddState(newState)
+    addon:Debug(self)
 end

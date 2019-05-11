@@ -53,12 +53,12 @@ function addon:OnChatCommand(msg)
 end
 
 function addon:StartLog()
-    local log = self.attendanceTracker:StartLog()
+    local log = self.attendanceTracker:StartTracking()
     -- TODO: Save the log
 end
 
 function addon:StopLog()
-    self.attendanceTracker:StopLog()
+    self.attendanceTracker:StopTracking()
 end
 
 function addon:ResumeLog()

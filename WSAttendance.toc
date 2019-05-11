@@ -9,3 +9,6 @@ locales.xml
 Core.lua
 Options.lua
 OptionActions.lua
+Util.lua
+AttendanceLogSupervisor.lua
+AttendanceTracker.lua

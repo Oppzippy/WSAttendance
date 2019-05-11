@@ -41,9 +41,8 @@ function addon:RefreshConfig()
 end
 
 function addon:OnChatCommand(msg)
-    local args = { self:GetArgs(msg, 1) } -- Increase for more args
-    if #args < 1 then return end
-    local action = args[1]:lower()
+    local action = self:GetArgs(msg, 1) or ""
+    action = action:lower()
     if action == "start" then
         self:StartLog()
         print(L.started_log)

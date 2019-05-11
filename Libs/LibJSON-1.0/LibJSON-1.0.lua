@@ -1,6 +1,6 @@
 -- luacheck: globals LibStub
 
-local MAJOR, MINOR = "LibJSON-1.0", 1
+local MAJOR, MINOR = "LibJSON-1.0", 2
 local LibJSON = LibStub:NewLibrary(MAJOR, MINOR)
 if not LibJSON then return end
 
@@ -15,6 +15,7 @@ local SPECIAL_CHARS, SPECIAL_CHARS_REPLACE = "([\"\r\n\t\\])", "\\%1"
 
 -- Recursively converts a lua table to a JSON object/array
 function LibJSON.ToJSON(input)
+    assert(type(input) == "table", "ToJSON input must be a table")
     local isArray = input[1] ~= nil
     local ret = {}
     table.insert(ret, isArray and ARRAY_START or OBJECT_START) -- Start table
@@ -22,7 +23,11 @@ function LibJSON.ToJSON(input)
     for key, value in iterator(input) do
         local currentType = type(value)
         if currentType == "table" then
-            table.insert(ret, LibJSON.ToString(value))
+            if isArray then
+                table.insert(ret, ARRAY_FORMAT:format(LibJSON.ToJSON(value)))
+            else
+                table.insert(ret, OBJECT_FORMAT:format(key, LibJSON.ToJSON(value)))
+            end
             table.insert(ret, SEPARATOR)
         elseif currentType == "string" or currentType == "number" then
             -- Quote it if it's a string
@@ -39,7 +44,9 @@ function LibJSON.ToJSON(input)
             table.insert(ret, SEPARATOR)
         end
     end
-    table.remove(ret) -- Delete trailing comma
+    if ret[#ret] == SEPARATOR then -- Delete trailing comma
+        table.remove(ret)
+    end
     table.insert(ret, isArray and ARRAY_END or OBJECT_END) -- End table
     return table.concat(ret)
 end

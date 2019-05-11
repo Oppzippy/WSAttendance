@@ -9,10 +9,10 @@ function AttendanceLogSupervisor:Create(log)
     -- Construct
     if log then
         ret.log = log
+        ret:RebuildState()
     else
         ret.log = {}
     end
-    ret:RebuildState()
     return ret
 end
 

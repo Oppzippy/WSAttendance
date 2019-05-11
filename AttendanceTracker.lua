@@ -17,7 +17,8 @@ function attendanceTracker:StartTracking(log)
     self.prevUpdate = 0
     self:Update()
     self.frame:SetScript("OnEvent", function(event)
-        attendanceTracker[event](attendanceTracker)
+        local f = self[event]
+        if f then f(self) end
     end)
     self.frame:RegisterEvent("PLAYER_REGEN_ENABLED")
     self.frame:RegisterEvent("GUILD_ROSTER_UPDATE")

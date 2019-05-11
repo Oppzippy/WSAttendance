@@ -42,13 +42,17 @@ end
 
 function addon:OnChatCommand(msg)
     local args = { self:GetArgs(msg, 1) } -- Increase for more args
+    if #args < 1 then return end
     local action = args[1]:lower()
     if action == "start" then
         self:StartLog()
+        print(L.started_log)
     elseif action == "stop" then
         self:StopLog()
+        print(L.stopped_log)
     elseif action == "resume" then
         self:ResumeLog()
+        print(L.resumed_log)
     end
 end
 

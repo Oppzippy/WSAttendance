@@ -27,7 +27,7 @@ function addon.util.TableDiff(t1, t2)
     end
     if t2 ~= nil then
         for k, v in pairs(t2) do
-            if t1 == nil or v ~= t1[k] then
+            if t1 == nil or t1[k] == nil then -- If it's not nil, it was caught in the pass through t1
                 count = count + 1
                 diff[count] = k
             end

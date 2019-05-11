@@ -36,9 +36,7 @@ function AttendanceLogSupervisor:SnapshotState()
         if online then
             status.zone = zone
         end
-        if IsGUIDInGroup(guid) then
-            status.group = true
-        end
+        status.group = IsGUIDInGroup(guid)
     end
     return state
 end
@@ -48,7 +46,7 @@ function AttendanceLogSupervisor:AddState(newState)
     local updates = {}
     if self.state then
         for player, status in pairs(self.state) do
-            local diff = addon.util.TableDiff(self.state, newState[player])
+            local diff = addon.util.TableDiff(self.state[player], newState[player])
             if #diff ~= 0 then
                 updates[player] = {}
                 for _, key in pairs(diff) do
@@ -59,7 +57,12 @@ function AttendanceLogSupervisor:AddState(newState)
     else
         updates = newState
     end
-    tinsert(self.log, updates)
+    if updates[1] then -- Don't add to log if there are no updates
+        tinsert(self.log, {
+            time = GetServerTime(),
+            updates = updates,
+        })
+    end
     self.state = newState
 end
 

@@ -14,6 +14,6 @@ function addon:DeleteLog(log)
 end
 
 function addon:ExportLog(log)
-    local json = LibJSON:ToJSON(log)
+    local json = LibJSON.ToJSON({log = log})
     LibCopyPaste:Copy(L.name, json)
 end

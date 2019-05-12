@@ -19,7 +19,7 @@ function addon:CreateOptionsLogExport(log)
                 name = L.delete,
                 type = "execute",
                 func = function()
-                    self:DeleteLog(log)
+                    StaticPopup_Show("WSATTENDANCE_DELETE_LOG", nil, nil, log)
                 end,
             },
         }

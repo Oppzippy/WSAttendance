@@ -10,5 +10,6 @@ Core.lua
 Util.lua
 Options/Options.lua
 Options/OptionActions.lua
+Options/Popups.lua
 Logging/AttendanceLogSupervisor.lua
 Logging/AttendanceTracker.lua

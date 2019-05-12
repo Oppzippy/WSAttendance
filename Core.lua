@@ -30,7 +30,11 @@ function addon:RefreshConfig()
 end
 
 function addon:OnChatCommand(msg)
-    local action = self:GetArgs(msg, 1) or ""
+    local action = self:GetArgs(msg, 1)
+    if not action then
+        -- TODO: Open options
+        return
+    end
     action = action:lower()
     if action == "start" then
         self:StartLog()
@@ -76,6 +80,16 @@ function addon:ResumeLog()
     if prevLog then
         self.attendanceTracker:StartTracking(prevLog)
         return prevLog
+    end
+end
+
+function addon:DeleteLog(log)
+    local logs = self.db.profile.logs
+    for i, savedLog in ipairs(logs) do
+        if savedLog == log then
+            table.remove(logs, i)
+            return
+        end
     end
 end
 

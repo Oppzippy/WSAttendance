@@ -32,6 +32,7 @@ function attendanceTracker:StopTracking()
     self.log = nil
     self.frame:SetScript("OnEvent", nil)
     self.frame:UnregisterAllEvents()
+    self:CancelAllTimers()
     return log
 end
 

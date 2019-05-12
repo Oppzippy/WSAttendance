@@ -46,9 +46,10 @@ function addon:OnChatCommand(msg)
         local logs = self.db.profile.logs
         local count = 0
         for i = 1, #logs do
-            if #logs[i] == 0 then
-                table.remove(logs, i)
-                i = i - 1
+            local newIndex = i - count
+            if #logs[newIndex] == 0 then
+                table.remove(logs, newIndex)
+                count = count + 1
             end
         end
         self:Print("Wiped", count, "empty logs")

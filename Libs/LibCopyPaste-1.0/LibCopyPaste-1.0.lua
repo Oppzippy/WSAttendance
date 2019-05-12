@@ -1,6 +1,6 @@
 -- luacheck: globals LibStub
 
-local LibCopyPaste = LibStub:NewLibrary("LibCopyPaste-1.0", 1)
+local LibCopyPaste = LibStub:NewLibrary("LibCopyPaste-1.0", 4)
 if not LibCopyPaste then return end
 
 -- CopyPasteFrame Class
@@ -12,11 +12,40 @@ function CopyPasteFrame:Create()
     local obj = {}
     setmetatable(obj, CopyPasteFrame)
     -- Main frame
-    local frame = CreateFrame("Frame", nil, UIParent, "DialogBoxFrame")
-    obj.button = frame:GetChildren()
+    local frame = CreateFrame("Frame", nil, UIParent)
+    -- Backdrop
+    frame:SetBackdrop({
+        bgFile = "Interface/DialogFrame/UI-DialogBox-Background",
+        tile = true,
+        edgeFile = "Interface/DialogFrame/UI-DialogBox-Border",
+        edgeSize = 32,
+        insets = {
+            left = 11,
+            right = 12,
+            top = 12,
+            bottom = 11,
+        },
+    })
+    -- Okay Button
+    local button = CreateFrame("Button", nil, frame)
+    obj.button = button
+    button = button
+    button:SetSize(128, 32)
+    button:SetPoint("BOTTOM", 0, 16)
+    button:SetText(OKAY)
+    -- Textures
+    button:SetNormalTexture(button:CreateTexture(nil, nil, "DialogButtonNormalTexture"))
+    button:SetPushedTexture(button:CreateTexture(nil, nil, "DialogButtonPushedTexture"))
+    button:SetHighlightTexture(button:CreateTexture(nil, nil, "DialogButtonPushedTexture"))
+    -- Fonts
+    button:SetNormalFontObject(DialogButtonNormalText)
+    button:SetHighlightFontObject(DialogButtonHighlightText)
+    button:SetScript("OnClick", function()
+        self:GetParent():Hide()
+    end)
+
     frame:EnableMouse(true)
     frame:EnableKeyboard(true)
-    frame:SetMovable(true)
 
     -- Child frames
     local title = frame:CreateFontString(nil, "ARTWORK", "GameFontNormalHugeBlack")
@@ -80,8 +109,8 @@ function CopyPasteFrame:IsOpen()
     return self.frame:IsShown()
 end
 
+-- Callback runs when Okay is clicked. Does not run when excape is pressed.
 function CopyPasteFrame:SetCallback(callback)
-    local this = self
     self.button:SetScript("OnClick", function()
         if callback then
             callback(self:GetText())
@@ -97,17 +126,26 @@ function CopyPasteFrame:Hide()
     self.frame:Hide()
 end
 
--- Public
-local frame = CopyPasteFrame:Create()
-
+-- Public API
+local frame
+-- Open a frame containing text for the user to copy
+-- @param title Title of the copy window.
+-- @param text Text to display in the window. This is what will be copied.
 function LibCopyPaste:Copy(title, text)
+    assert(type(title) == "string" and type(text) == "string", "Title and Text are required and must be strings. Usage: Copy(title, text)")
+    if not frame then frame = CopyPasteFrame:Create() end
     frame:Hide()
     frame:SetTitle(title)
     frame:SetText(text)
     frame:Show()
 end
 
+-- Open a frame for the user to paste text into
+-- @param title Title of the paste window.
+-- @param callback Function that will be run when the paste window is closed. The function will be passed the pasted text as an argument.
 function LibCopyPaste:Paste(title, callback)
+    assert(type(title) == "string" and type(callback) == "function", "Title and Callback are required. title must be a string and callback must be a function. Usage: Copy(title, callback)")
+    if not frame then frame = CopyPasteFrame:Create() end
     frame:Hide()
     frame:SetTitle(title)
     frame:SetCallback(callback)

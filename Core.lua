@@ -39,8 +39,12 @@ function addon:OnChatCommand(msg)
         self:StopLog()
         self:Print(L.stop_log)
     elseif action == "resume" then
-        self:ResumeLog()
-        self:Print(L.resume_log)
+        local log = self:ResumeLog()
+        if log then
+            self:Print(L.resume_log:format(log[1] and date(L.date_time, log[1].timestamp) or L.latest))
+        else
+            self:Print(L.resume_log_no_log_found)
+        end
     elseif action == "clean" then
         local logs = self.db.profile.logs
         local count = 0
@@ -69,8 +73,10 @@ end
 function addon:ResumeLog()
     local dbLogs = self.db.profile.logs
     local prevLog = dbLogs[#dbLogs]
-    self.attendanceTracker:ResumeLog(prevLog)
-    return prevLog
+    if prevLog then
+        self.attendanceTracker:StartTracking(prevLog)
+        return prevLog
+    end
 end
 
 do

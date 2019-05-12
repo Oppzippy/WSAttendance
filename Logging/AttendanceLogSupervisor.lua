@@ -23,8 +23,11 @@ end
 function AttendanceLogSupervisor:RebuildState()
     self.state = {}
     for _, updateGroup in ipairs(self.log) do
-        for _, update in ipairs(self.log) do
-            self.state[update.player] = update.status
+        for player, updates in ipairs(updateGroup) do
+            if not self.state[player] then self.state[player] = {} end
+            for update, value in pairs(updates) do
+                self.state[player][update] = value
+            end
         end
     end
 end

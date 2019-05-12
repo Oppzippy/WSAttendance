@@ -42,7 +42,7 @@ function addon:OnChatCommand(msg)
     elseif action == "resume" then
         self:ResumeLog()
         self:Print(L.resume_log)
-    elseif action == "wipe" then
+    elseif action == "clean" then
         local logs = self.db.profile.logs
         local count = 0
         for i = 1, #logs do

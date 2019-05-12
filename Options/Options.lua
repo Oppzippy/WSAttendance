@@ -28,9 +28,13 @@ end
 
 function addon:CreateOptionsLogExports()
     local options = {}
-    for _, log in ipairs(self.db.profile.logs) do
+    local logs = self.db.profile.logs
+    local count = #logs
+    for i = 1, count do
+        local log = logs[i]
         local option = self:CreateOptionsLogExport(log)
         if option then
+            option.order = count - i  -- Display logs in reverse order (newest first)
             options[option.name] = option
         end
     end

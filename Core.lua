@@ -35,13 +35,23 @@ function addon:OnChatCommand(msg)
     action = action:lower()
     if action == "start" then
         self:StartLog()
-        print(L.start_log)
+        self:Print(L.start_log)
     elseif action == "stop" then
         self:StopLog()
-        print(L.stop_log)
+        self:Print(L.stop_log)
     elseif action == "resume" then
         self:ResumeLog()
-        print(L.resume_log)
+        self:Print(L.resume_log)
+    elseif action == "wipe" then
+        local logs = self.db.profile.logs
+        local count = 0
+        for i = 1, #logs do
+            if #logs[i] == 0 then
+                table.remove(logs, i)
+                i = i - 1
+            end
+        end
+        self:Print("Wiped", count, "empty logs")
     end
 end
 

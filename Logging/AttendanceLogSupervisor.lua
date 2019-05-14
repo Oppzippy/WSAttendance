@@ -63,12 +63,19 @@ function AttendanceLogSupervisor:AddState(newState)
     local doUpdates = false -- Don't add to log if there are no updates
     if self.state then
         for player, status in pairs(self.state) do
-            local diff = addon.util.TableDiff(self.state[player], newState[player])
-            if #diff ~= 0 then
-                updates[player] = {}
-                doUpdates = true
-                for _, key in pairs(diff) do
-                    updates[player][key] = newState[player][key]
+            if not newState[player] then -- Someone gquits or a non guild member leaves the raid
+                updates[player] = {
+                    online = false,
+                    group = false,
+                }
+            else
+                local diff = addon.util.TableDiff(self.state[player], newState[player])
+                if #diff ~= 0 then
+                    updates[player] = {}
+                    doUpdates = true
+                    for _, key in pairs(diff) do
+                        updates[player][key] = newState[player][key]
+                    end
                 end
             end
         end

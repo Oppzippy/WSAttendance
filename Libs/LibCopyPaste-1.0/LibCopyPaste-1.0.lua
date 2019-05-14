@@ -1,6 +1,6 @@
 -- luacheck: globals LibStub
 
-local LibCopyPaste = LibStub:NewLibrary("LibCopyPaste-1.0", 4)
+local LibCopyPaste = LibStub:NewLibrary("LibCopyPaste-1.0", 5)
 if not LibCopyPaste then return end
 
 -- CopyPasteFrame Class
@@ -13,6 +13,7 @@ function CopyPasteFrame:Create()
     setmetatable(obj, CopyPasteFrame)
     -- Main frame
     local frame = CreateFrame("Frame", nil, UIParent)
+    frame:SetFrameStrata("DIALOG")
     -- Backdrop
     frame:SetBackdrop({
         bgFile = "Interface/DialogFrame/UI-DialogBox-Background",

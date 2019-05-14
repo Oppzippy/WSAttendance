@@ -32,7 +32,7 @@ end
 function addon:OnChatCommand(msg)
     local action = self:GetArgs(msg, 1)
     if not action then
-        -- TODO: Open options
+        InterfaceOptionsFrame_OpenToCategory(L.name)
         return
     end
     action = action:lower()

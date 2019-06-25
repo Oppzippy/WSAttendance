@@ -1,5 +1,5 @@
 ## Title: WSAttendance
-## Interface: 80100
+## Interface: 80200
 ## Version: 1.0
 ## Author: Oppzippy
 ## SavedVariables: WSAttendanceDB
